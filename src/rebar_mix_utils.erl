@@ -96,6 +96,8 @@ add_elixir(State) ->
   code:add_patha(filename:join(LibDir, "elixir/ebin")),
   code:add_patha(filename:join(LibDir, "mix/ebin")),
   code:add_patha(filename:join(LibDir, "logger/ebin")),
+  code:add_patha(filename:join(LibDir, "ex_unit/ebin")),
+  code:add_patha(filename:join(LibDir, "eex/ebin")),
   State.
 
 %% @doc Add elixir to the application build path
@@ -119,6 +121,16 @@ add_elixir_to_build_path(State)->
   MixBuildPath = filename:join(BuildPath, "mix"),
   file:make_symlink(MixPath, MixBuildPath),
 
+  %% Link ex_unit
+  ExUnitPath = filename:join(LibDir, "ex_unit"),
+  ExUnitBuildPath = filename:join(BuildPath, "ex_unit"),
+  file:make_symlink(ExUnitPath, ExUnitBuildPath),
+
+  %% Link eex
+  EexPath = filename:join(LibDir, "eex"),
+  EexBuildPath = filename:join(BuildPath, "eex"),
+  file:make_symlink(EexPath, EexBuildPath),
+
   State.
 
 %% @doc Add elixir to a list of lock dependencies.
@@ -128,7 +140,8 @@ elixir_to_lock(Lock) ->
     [
      {<<"elixir">>, {iex_dep, <<"elixir">>, <<"">>}, 0},
      {<<"logger">>, {iex_dep, <<"logger">>, <<"">>}, 0},
-     {<<"mix">>, {iex_dep, <<"mix">>, <<"">>}, 0}
+     {<<"mix">>, {iex_dep, <<"mix">>, <<"">>}, 0},
+     {<<"ex_unit">>, {iex_dep, <<"ex_unit">>, <<"">>}, 0}
     ].
 
 %% @doc compiles a elixir app which is located in AppDir.
